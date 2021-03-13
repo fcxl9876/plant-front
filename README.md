@@ -1,2 +1,2 @@
 # plant-front
-a front project of plantserver.
+A front project of plantserver.
