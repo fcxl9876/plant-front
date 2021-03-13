@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="css/iconfont.css" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			.mui-bar.mui-bar-tab{
+				background: #FFFFFF;
+			}
+			.mui-tab-item.mui-active{
+				color:  #0188FB;
+			}
+			.iconfont{
+				font-size: 16px;
+			}
+			.mui-tab-label{
+				font-size: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<nav class="mui-bar mui-bar-tab">
+			<a id="defaultTab" class="mui-tab-item mui-active" data-id="data">
+				<span class="mui-icon iconfont">&#xe631;</span>
+				<span class="mui-tab-label">实时数据</span>
+			</a>
+			<a class="mui-tab-item" data-id="analysis">
+				<span class="mui-icon iconfont">&#xe656;</span>
+				<span class="mui-tab-label">统计分析</span>
+			</a>
+			<a class="mui-tab-item" data-id="mine">
+				<span class="mui-icon iconfont">&#xe6ce;</span>
+				<span class="mui-tab-label">我的</span>
+			</a>
+		</nav>
+		
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			//mui初始化
+			mui.init();
+			var subPage = null;
+			var subpages = [{
+				url: 'models/data/data.html',
+				id: 'data'
+			}, {
+				url: 'models/analysis/analysis.html',
+				id: 'analysis',
+			}, {
+				url: 'models/mine/mine.html',
+				id: 'mine'
+			}];
+			var subStyles = {
+				top: '0px',
+				bottom: '50px'
+			};
+			
+			var aniShow = {};
+			
+			//安卓自带返回键退出当前应用
+			var firsts = null;
+			mui.back = function back() {
+				//首次按键，提示‘再按一次退出应用’
+				if(!firsts) {
+					firsts = new Date().getTime();
+					mui.toast("再按一次退出应用", {
+						duration: "long"
+					});
+					setTimeout(function() {
+						firsts = null;
+					}, 1000);
+				} else {
+					if(new Date().getTime() - firsts < 1500) {
+						plus.runtime.quit();
+					}
+				}
+			};
+			
+			 //创建子页面，首个选项卡页面显示，其它均隐藏；
+			mui.plusReady(function() {
+				
+				var self = plus.webview.currentWebview();
+				for (var i = 2; i >=0; i--) {
+					var temp = {};
+					var sub = plus.webview.create(subpages[i].url, subpages[i].id, subStyles);
+					if (i>0) {
+						sub.hide();
+					}else{
+						console.log(subpages[i].url);
+						temp[subpages[i].url] = "true";
+						mui.extend(aniShow,temp);
+					}
+					self.append(sub);
+				}
+				
+				//监听自定义事件，show
+				window.addEventListener('show', function(event) {
+					plus.nativeUI.closeWaiting();//关闭等待框
+					mui.currentWebview.show(); //显示当前页面
+				});
+				
+			});
+			//当前激活选项
+			var activeTab = subpages[0].id;
+			//选项卡点击事件
+			mui('.mui-bar-tab').on('tap', 'a', function(e) {
+				var targetTab = this.getAttribute('data-id');
+				if(targetTab == activeTab) {
+					return;
+				}
+				
+				//显示目标选项卡
+				//若为iOS平台或非首次显示，则直接显示
+				if(mui.os.ios || aniShow[targetTab]) {
+					plus.webview.show(targetTab);
+				} else {
+					//否则，使用fade-in动画，且保存变量
+					var temp = {};
+					temp[targetTab] = "true";
+					mui.extend(aniShow, temp);
+					plus.webview.show(targetTab, "fade-in", 300);
+				}
+				//隐藏当前;
+				plus.webview.hide(activeTab);
+				subPage = plus.webview.getWebviewById(targetTab);
+				mui.fire(subPage,'re',{});
+				
+				//更改当前活跃的选项卡
+				activeTab = targetTab;
+			});
+			
+			//自定义事件，模拟点击“首页选项卡”
+			document.addEventListener('gohome', function() {
+				var defaultTab = document.getElementById("defaultTab");
+				//模拟首页点击
+				mui.trigger(defaultTab, 'tap');
+				//切换选项卡高亮
+				var current = document.querySelector(".mui-bar-tab>.mui-tab-item.mui-active");
+				if(defaultTab !== current) {
+					current.classList.remove('mui-active');
+					defaultTab.classList.add('mui-active');
+				}
+			}); 
+		</script>
+	</body>
+
+</html>

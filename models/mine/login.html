@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>登陆</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" type="text/css"/>
+		<link href="../../css/app.css" rel="stylesheet" type="text/css"/>
+		<link href="../../css/iconfont.css" rel="stylesheet" type="text/css"/>
+		
+		<style type="text/css">
+			html,body{
+				width:100%;
+				height:100%;
+			}
+			body{
+				background: url(../../images/test.jpg);
+				background-repeat: no-repeat;
+				background-size: 100% 100%;
+			}
+			.mui-bar {
+				-webkit-box-shadow: none;
+				box-shadow: none;
+			}
+			.btn01{
+				width: 100%;
+				background: #007AFF;
+				color: white;
+				height:2.75rem;
+				font-size: 1rem;
+				border: 0;
+			}
+			.mui-bar.mui-bar-nav{
+				background: #0188FB;
+			}
+			.mui-bar.mui-bar-nav a,.mui-bar.mui-bar-nav h1{
+				color: #FFFFFF;
+			}
+			.mui-input-row:last-child:after {
+				height: 0;
+			}
+			.link-area span{
+				float: left;
+				padding: 8px 10px 8px 0;
+			}
+			.link-area span.active{
+				float: left;
+				padding: 8px 10px 8px 0;
+				color: #0062CC;
+			}
+			#login{
+				margin-top: 20px;
+				height: 40px;
+			}
+			.myFormItem input{
+				background-color: rgba(255,255,255,0);
+			}
+			.myFormItem span{
+				color: #999999;
+				font-size: 20px;
+			}
+			.box{
+				background-color: rgba(255,255,255,0.8);
+				width:80%;  
+				height:260px;  
+				position:absolute;  
+				left:50%;  
+				top:70%;  
+				margin:-150px 0 0 -40%;
+			}
+			.mui-modal{
+				background-color: rgba(255,255,255,0);
+			}
+			.bodyDiv{
+				background-color: rgba(255,255,255,1);
+				width:80%;  
+				height:440px;  
+				position:absolute;  
+				left:50%;  
+				top:60%;  
+				margin:-220px 0 0 -40%;
+			}
+			#back{
+				width: 50px;
+				height: 50px;
+				position: absolute;
+				left: 50%;
+				margin: -25px 0 0 -25px;
+				z-index: 10;
+				border-radius: 50%;
+				font-size: 25px;
+			}
+			#register{
+				margin-top: 10px;
+				width: 100%;
+				background: #007AFF;
+				color: white;
+				font-size: 1rem;
+				border: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div class="mui-card-content-inner">
+				<div class="mui-row">
+					<div class="mui-col-xs-12">
+						<div class="myFormItem">
+							<span class="mui-icon iconfont">&#xe611;</span>
+							<label for="username">账号</label>
+							<input id="username" type="text"/>
+						</div>
+					</div>
+				</div>
+				<div class="mui-row">
+					<div class="mui-col-xs-12">
+						<div class="myFormItem">
+							<span class="mui-icon iconfont">&#xe610;</span>
+							<label for="password">密码</label>
+							<input id="password" type="password" class="mui-input-password"/>
+						</div>
+					</div>
+				</div>
+				<div class="link-area" style="width: 100%;padding: 0 10px;">
+					<div class="mui-input-row">
+						<span id="autoLogin" class="iconfont">&#xe748;</span>
+						<label style="padding: 11px 0; width: 100px; font-size: 14px;">记住密码</label>
+						<a id="showModalBtn" style="float: right;padding: 8px 0 11px 0;font-size: 14px;">注册用户</a>
+					</div>
+					
+					<button id="login" type="button" class="btn01">立即登录</button>
+				</div>
+			</div>
+		</div>
+		
+		<div id="modal" class="mui-modal">
+			<div class="bodyDiv">
+				<a id="back" type="button" class="mui-btn mui-btn-blue iconfont">&#xe600;</a>
+				<div class="mui-card-content-inner">
+					<div class="mui-row">
+						<div class="mui-col-xs-12">
+							<div class="myFormItem">
+								<span class="mui-icon iconfont">&#xe611;</span>
+								<label for="username">用户名</label>
+								<input id="username" type="text" v-model="username"/>
+							</div>
+						</div>
+					</div>
+					<div class="mui-row">
+						<div class="mui-col-xs-12">
+							<div class="myFormItem">
+								<span class="mui-icon iconfont">&#xe610;</span>
+								<label for="password">密码</label>
+								<input id="password" type="password" class="mui-input-password" v-model="password"/>
+							</div>
+						</div>
+					</div>
+					<div class="mui-row">
+						<div class="mui-col-xs-12">
+							<div class="myFormItem">
+								<span class="mui-icon iconfont">&#xe60d;</span>
+								<label for="deviceId">设备编号</label>
+								<input id="deviceId" type="number" v-model="deviceId"/>
+							</div>
+						</div>
+					</div>
+					<div class="link-area">
+						<button id="register" type="button" class="btn01">注 册</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script src="../../js/aes.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/sqlite.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/app.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript">
+			// var wgtVer=null; //APP版本号
+			mui.init();
+			
+			var vm = new Vue({
+				el:".bodyDiv",
+				data:{
+					username: "",
+					password: "",
+					deviceId: ""
+				},
+				methods:{
+					
+				}
+			});
+			
+			var username=document.getElementById("username");
+			var password = document.getElementById("password");
+			var login = document.getElementById("login");
+			var register = document.getElementById('register');
+			var autoLogin = document.getElementById('autoLogin');
+			var showModalBtn = document.getElementById('showModalBtn');
+			var back = document.getElementById('back');
+			var modal = document.getElementById('modal');
+			var isFlag=true;
+			
+			mui.plusReady(function() {
+				//初始化
+				isFlag=localStorage.getItem('isFlag');
+				if(isFlag){
+					username.focus();
+					username.value=localStorage.getItem('username');
+					password.focus();
+					password.value=localStorage.getItem('password');
+					autoLogin.innerHTML="&#xe613;";
+					if(!autoLogin.classList.contains("active")){
+						autoLogin.classList.add("active");
+					}
+				}else{
+					username.value="";
+					password.value="";
+					autoLogin.innerHTML="&#xe748;";
+					if(autoLogin.classList.contains("active")){
+						autoLogin.classList.remove("active");
+					}
+				}
+
+				//“立即登录”按钮的点击事件
+				login.addEventListener('tap', function() {
+					if (username.value == "") {
+						mui.toast("账号不能为空", {
+							duration: "long"
+						});
+					} else if (password.value == "") {
+						mui.toast("密码不能为空", {
+							duration: "long"
+						});
+					} else {
+						if (network) {
+							ajax_login(username.value,password.value);
+						} else {
+							localStorage.setItem('dbFile',"_doc/"+username.value+"/plantdb.db");
+							plus.io.resolveLocalFileSystemURL(localStorage.getItem('dbFile'), function(file) {
+								let flag=false;
+								openDB().then(function(){
+									selectSQL("plant_user",'username="'+encrypt(username.value)+'" and password="'+encrypt(password.value)+'"',null).then(function(data){
+										if(data.length==0){
+											mui.toast("本地不存在该用户");
+										}else{
+											flag=true;
+											localStorage.setItem('tk', data[0].tk);
+											localStorage.setItem('username', data[0].username);
+											localStorage.setItem('deviceId',data[0].deviceId);
+											if(isFlag){
+												localStorage.setItem('isFlag', true);
+												localStorage.setItem('username', data[0].username);
+												localStorage.setItem("password",data[0].password);
+											}else{
+												localStorage.setItem('isFlag', false);
+												localStorage.removeItem('username');
+												localStorage.removeItem('password');
+											}
+											update("plant_user",data[0],data[0].id);
+										}
+									}).then(function(data){
+										closeDB();
+										if(flag){
+											showIndex();
+										}
+									});
+								})
+							},function(e){
+								mui.toast("本地不存在该用户，请联网后再试…");
+							});
+						}
+					}
+				});
+				
+				//“记住密码”按钮的点击事件
+				autoLogin.addEventListener('tap', function() {
+					if(autoLogin.classList.contains("active")){
+						autoLogin.innerHTML="&#xe748;";
+						autoLogin.classList.remove("active");
+						isFlag=false;
+					}else{
+						autoLogin.innerHTML="&#xe613;";
+						autoLogin.classList.add("active");
+						isFlag=true;
+					}
+				});
+				
+				showModalBtn.addEventListener('tap', function() {
+					document.activeElement.blur();
+					modal.classList.add("mui-active");
+				});
+				back.addEventListener('tap', function() {
+					modal.classList.remove("mui-active");
+					document.activeElement.blur();
+				});
+				
+				
+				//注册按钮的点击事件
+				register.addEventListener('tap', function() {
+					if (vm.username == "") {
+						mui.toast("用户名不能为空", {
+							duration: "long"
+						});
+					} else if (vm.password == "") {
+						mui.toast("密码不能为空", {
+							duration: "long"
+						});
+					} else if (vm.deviceId == "") {
+						mui.toast("设备编号不能为空", {
+							duration: "long"
+						})
+					} else {
+						if (network) {
+							ajax_reg();	// 注册
+						} else {
+							mui.toast("当前网络不给力，请稍后再试", {
+								duration: "long"
+							});
+						}
+					}
+				})
+				
+				// 获取本地应用资源版本号,检测更新   （后续添加）
+				// plus.runtime.getProperty(plus.runtime.appid,function(inf){  
+				//     wgtVer=inf.version;  
+				//     console.log("当前应用版本："+wgtVer);
+
+				// 	$.ajax({
+				// 		type: "POST",
+				// 		url: server + 'version',
+				// 		data: {},
+				// 		dataType: "json",
+				// 		success: function(data) {
+				// 			console.log(JSON.stringify(data));
+				// 			if (data.status == "200") {
+				// 				if(wgtVer && data.version && (wgtVer!=data.version)){  
+				// 				    plus.nativeUI.confirm("检测到新版本，是否立即更新？",function(e){
+				// 				    	if(e.index==0){
+				// 				    		downWgt(data.url);  // 下载升级包 
+				// 				    	}
+				// 				    },"APP更新提醒",["是","否"]);
+				// 				}
+				// 			} else {
+				// 				console.log(data.code + data.msg);
+				// 			}
+				// 		},
+				// 		error: function(error) {
+				// 			console.log(JSON.stringify(error));
+				// 		}
+				// 	});
+				// });  
+			})
+			
+			function showIndex(){
+				mui.openWindow({  
+				    url: '../../index.html',
+				    id: 'index',
+				    show: {  
+				        autoShow: false
+				    },
+				    waiting: {  
+				        autoShow: true,
+				        title: '正在加载...'
+				    }  
+				});
+			}
+
+			//向后台请求，登录
+			function ajax_login(code,psw) {
+				plus.nativeUI.showWaiting("登录中....", {
+					padlock: true
+				}); //数据出来前显示等待加载框
+				$.ajax({
+					type: "POST",
+					url: server + 'login',
+					data: {
+						uname: code,
+						pwd: psw
+					},
+					dataType: "json",
+					success: function(data) {
+						console.log(JSON.stringify(data));
+						if (data.status == "200") {
+							localStorage.setItem('id',data.id);
+							localStorage.setItem('tk', data.tk);
+							localStorage.setItem('username', data.username);
+							localStorage.setItem('deviceId',data.deviceId);
+							if(isFlag){
+								localStorage.setItem('isFlag', true);
+								localStorage.setItem('username', code);
+								localStorage.setItem("password",psw);
+							}else{
+								localStorage.setItem('isFlag', false);
+								localStorage.removeItem('username');
+								localStorage.removeItem('password');
+							}
+							
+							//设置用户db文件路径,并拷贝db文件到指定路径
+							localStorage.setItem('dbFile',"_doc/"+code+"/plantdb.db");
+							plus.io.resolveLocalFileSystemURL( "_www/db/plantdb.db", function(entry) {
+								plus.io.resolveLocalFileSystemURL(localStorage.getItem('dbFile'), function(file) {
+									console.log("db文件存在");
+									saveUserInfo(data,code,psw,isFlag);
+								},function(e){
+									console.log("db文件不存在");
+									plus.io.resolveLocalFileSystemURL('_doc/', function(root) {
+										root.getDirectory(code, {create:true,exclusive:false}, function(dir){
+											entry.copyTo(dir, '', function(result) {
+												console.log("拷贝文件成功");
+												saveUserInfo(data,code,psw,isFlag);
+											}, function(error) {  
+												console.log("拷贝文件失败"); 
+											}); 
+										},function (error) {
+											console.log(JSON.stringify(error));  
+										});
+									}, function(error) {  
+										console.log(JSON.stringify(error));  
+									});
+								});
+							});
+						} else {
+							plus.nativeUI.closeWaiting(); //数据渲染完毕，关闭加载框
+							console.log(data.code + data.msg);
+							mui.toast(data.msg, {
+								duration: "long"
+							});
+						}
+					},
+					error: function(error) {
+						plus.nativeUI.closeWaiting(); //数据渲染完毕，关闭加载框
+						console.log(JSON.stringify(error));
+					}
+				});
+			}
+			
+			function saveUserInfo(data,username,password,isFlag){
+				var promise=openDB();
+				promise.then(function(){
+					selectById("plant_user",data.id).then(function(sqldata){
+						if(sqldata.length==0){
+							let user={
+								id:data.id,
+								tk:data.tk,
+								username:username,
+								password:password,
+								createTime:getLocalTime(),
+								deviceId:data.deviceId,
+								autoLogin:isFlag
+							};
+							insert("plant_user",user).then(function(sqldata2){
+								closeDB();
+							});
+						}else{
+							let user={
+								id:data.id,
+								tk:data.tk,
+								username:username,
+								password:password,
+								updateTime:getLocalTime(),
+								deviceId:data.deviceId,
+								autoLogin:isFlag
+							};
+							update("plant_user",user,data.id).then(function(sqldata2){
+								closeDB();
+							});
+						}
+					})
+				}).catch(function (e) {
+					console.log('Failed: ' +JSON.stringify(e));
+				});
+				plus.nativeUI.closeWaiting(); //数据渲染完毕，关闭加载框
+				showIndex();
+			}
+			
+			function ajax_reg(){	// 注册函数
+				plus.nativeUI.showWaiting("注册中....", {
+					padlock: true
+				}); //数据出来前显示等待加载框
+				let param={
+					username:vm.username,
+					password:vm.password,
+					deviceId:vm.deviceId
+				};
+				$.ajax({
+					type: "POST",
+					url: server + 'logon',
+					data: JSON.stringify(param),
+					dataType: "json",
+					contentType: 'application/json; charset=UTF-8',
+					success: function(data) {
+						if(data.status=="200"){
+							plus.nativeUI.closeWaiting(); //数据渲染完毕，关闭加载框
+							mui.toast("注册成功",{duration:"long"});
+							mui.back();
+						} else if(data.status=="400"){
+							plus.nativeUI.closeWaiting(); //数据渲染完毕，关闭加载框
+							mui.toast("注册失败："+data.msg,{duration:"long"});
+						}
+					},
+					error: function(error) {
+						plus.nativeUI.closeWaiting(); //数据渲染完毕，关闭加载框
+						mui.toast("注册失败："+error,{duration:"long"});
+						console.log(JSON.stringify(error));
+					}
+				});
+			};
+			
+			//输入框获得焦点动画效果
+			$(".myFormItem input").focus(function(event) {
+				$(this).siblings("label").addClass("active");
+			});
+			//输入框失去焦点动画效果
+			$(".myFormItem input").blur(function(event) {
+				if($(this).val()==""){
+					$(this).siblings("label").removeClass("active");
+				}
+			});
+			
+			// 下载wgt文件   
+			// function downWgt(wgtUrl){  
+			// 	plus.nativeUI.showWaiting("下载wgt文件...");  
+			// 	plus.downloader.createDownload( wgtUrl, {filename:"_doc/update/"}, function(d,status){  
+			// 		if ( status == 200 ) {   
+			// 			console.log("下载wgt成功："+d.filename);  
+			// 			installWgt(d.filename); // 安装wgt包  
+			// 		} else {  
+			// 			console.log("下载wgt失败！");  
+			// 			plus.nativeUI.alert("下载wgt失败！");  
+			// 		}  
+			// 		plus.nativeUI.closeWaiting();  
+			// 	}).start();  
+			// }
+			
+			// 更新应用资源  
+			// function installWgt(path){  
+			// 	plus.nativeUI.showWaiting("安装wgt文件...");  
+			// 	plus.runtime.install(path,{},function(){  
+			// 		plus.nativeUI.closeWaiting();  
+			// 		plus.nativeUI.alert("应用资源更新完成！",function(){  
+			// 			plus.runtime.restart();  
+			// 		});  
+			// 	},function(e){  
+			// 		plus.nativeUI.closeWaiting();  
+			// 		plus.nativeUI.alert("安装wgt文件失败["+e.code+"]："+e.message);  
+			// 	});  
+			// }
+		</script>
+	</body>
+</html>
