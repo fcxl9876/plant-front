@@ -5,13 +5,83 @@
 		<meta charset="utf-8">
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="css/mui.css" rel="stylesheet" />
+		<link href="../../css/mui.min.css" rel="stylesheet" type="text/css"/>
+		<link href="../../css/app.css" rel="stylesheet" type="text/css"/>
+		<link href="../../css/iconfont.css" rel="stylesheet" type="text/css"/>
+
+		<style>
+			.mui-bar .mui-title{
+				left: 1rem;
+				right: 88px;
+			}
+			.mui-search input{
+				color: #FFFFFF;
+				z-index: 10;
+			}
+			.mui-placeholder span{
+				color:#fff !important;
+				opacity: 0.6;
+			}
+			div.mui-input-row.mui-search.mui-active::before{
+				color:#fff !important;
+			}
+			.mui-icon.iconfont{
+				margin-right: 1rem;
+			}
+			#add_project{
+				position: fixed;
+				bottom: 1.25rem; 
+				right: 1.25rem; 
+				z-index:10;
+				border-radius: 50%;
+				height: 3rem;
+				width: 3rem;
+				font-size: 1.5rem;
+			}
+			.mui-scroll-wrapper {
+				margin-top: 65px;
+			}
+		</style>
 	</head>
 
 	<body>
-		<script src="../../js/mui.min.js"></script>
+		<div class="bodyDiv">
+			<header class="mui-bar mui-bar-nav">
+				<!-- <a class="iconfont mui-pull-right" href="#topPopover">&#xe605;</a> -->
+				<!-- <a class="iconfont mui-pull-right" v-show="flag" @click="showSearch">&#xe60b;</a> -->
+				<h1 class="mui-title mui-text-left" v-show="flag">数据</h1>
+				<!-- <a class="iconfont mui-pull-right" v-show="!flag" @click="hideSearch">&#xe600;</a> -->
+				<!-- <div class="mui-input-row mui-search" v-show="!flag">
+					<input type="search" class="searchInput" placeholder="请输入项目编号/项目名称" v-model="key">
+				</div> -->
+			</header>
+			<div class="mui-content">
+				
+			</div>
+		</div>
+		
+		<script src="../../js/aes.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/sqlite.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/app.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			mui.init()
+			mui.init();
+			var vm = new Vue({
+				el: '.bodyDiv',
+				data:{
+					key:"",
+					flag:true
+				}
+			});
+			
+			mui('.mui-scroll-wrapper').scroll();
+			mui.plusReady(function() {
+				//页面初始化
+				var father = plus.webview.currentWebview().opener();
+				mui.fire(father, 'show');
+			});
 		</script>
 	</body>
 
